@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheduling App - Never Miss Important Events</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2196F3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Scheduling App">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Schedule events for tomorrow with voice notifications and group sharing. Never miss important events again!">
+    <meta name="keywords" content="scheduling, voice notifications, group sharing, events, reminders, mobile app">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: #2196F3;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .features {
+            text-align: left;
+            margin: 30px 0;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: #2196F3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+            color: white;
+        }
+        
+        .feature-text {
+            flex: 1;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        
+        .feature-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .download-options {
+            margin-top: 30px;
+        }
+        
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+        
+        .download-btn.secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e9ecef;
+        }
+        
+        .download-btn.secondary:hover {
+            background: #e9ecef;
+        }
+        
+        .pwa-install {
+            background: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        .pwa-install:hover {
+            background: #45a049;
+        }
+        
+        .coming-soon {
+            background: #FF9800;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .qr-code {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            background: #ddd;
+            margin: 0 auto 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="app-icon">📅</div>
+        <h1>Scheduling App</h1>
+        <p class="subtitle">Never miss important events with voice notifications and group sharing</p>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🔊</div>
+                <div class="feature-text">
+                    <div class="feature-title">Voice Notifications</div>
+                    <div class="feature-desc">Spoken alerts when events are due</div>
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">👥</div>
+                <div class="feature-text">
+                    <div class="feature-title">Group Sharing</div>
+                    <div class="feature-desc">Share events with friends and family</div>
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <div class="feature-text">
+                    <div class="feature-title">Mobile Optimized</div>
+                    <div class="feature-desc">Works perfectly on your phone</div>
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">
+                    <div class="feature-title">Instant Access</div>
+                    <div class="feature-desc">No app store needed</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="download-options">
+            <a href="#" class="download-btn pwa-install" id="installPWA">
+                📱 Install as App (Recommended)
+            </a>
+            
+            <a href="#" class="download-btn" onclick="openWebApp()">
+                🌐 Use Web Version Now
+            </a>
+            
+            <a href="#" class="download-btn secondary" onclick="downloadAPK()">
+                📦 Download Android APK
+            </a>
+            
+            <a href="#" class="download-btn coming-soon">
+                🍎 iOS App (Coming Soon)
+            </a>
+        </div>
+        
+        <div class="qr-code">
+            <div class="qr-placeholder">QR Code for Easy Sharing</div>
+            <p style="font-size: 14px; color: #666;">Scan to share with friends</p>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Scheduling App v1.0.0</strong></p>
+            <p>Built with React Native • Voice-enabled • Group sharing</p>
+        </div>
+    </div>
+
+    <script>
+        // PWA Installation
+        let deferredPrompt;
+        const installBtn = document.getElementById('installPWA');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('PWA installed');
+                }
+                deferredPrompt = null;
+            } else {
+                // Fallback for browsers that don't support PWA
+                alert('Add this page to your home screen for the best experience!');
+            }
+        });
+
+        function openWebApp() {
+            // In a real implementation, this would open the web version
+            alert('🚀 Opening web version... (This would launch the full app in a real deployment)');
+        }
+
+        function downloadAPK() {
+            // In a real implementation, this would trigger APK download
+            alert('📦 APK download would start here. For now, please use the web version or contact the developer for the APK file.');
+        }
+
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // Add to home screen prompt for iOS
+        if (navigator.userAgent.match(/iPhone|iPad|iPod/)) {
+            const iosInstall = document.createElement('div');
+            iosInstall.innerHTML = `
+                <div style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #000; color: #fff; padding: 15px; border-radius: 10px; text-align: center; z-index: 1000;">
+                    <p style="margin: 0 0 10px;">Install this app: tap <strong>Share</strong> then <strong>Add to Home Screen</strong></p>
+                    <button onclick="this.parentElement.parentElement.remove()" style="background: #fff; color: #000; border: none; padding: 5px 15px; border-radius: 5px;">Got it</button>
+                </div>
+            `;
+            document.body.appendChild(iosInstall);
+        }
+    </script>
+</body>
+</html>
