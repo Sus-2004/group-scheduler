@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <title>Group Voice Scheduling App</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiR3JvdXAgVm9pY2UgU2NoZWR1bGluZyBBcHAiLCJzaG9ydF9uYW1lIjoiR3JvdXAgU2NoZWR1bGVyIiwiZGVzY3JpcHRpb24iOiJTaGFyZWQgc2NoZWR1bGluZyBhcHAgd2l0aCB2b2ljZSBub3RpZmljYXRpb25zIiwic3RhcnRfdXJsIjoiLi8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmZmZmZmIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qUWlJR2hsYVdkb2REMGlNalFpSUhacFpYZENiM2c5SWpBZ01DQXlOQ0F5TkNJZ1ptbHNiRDBpSXpJMU5qTmxZaUkrUEdOcGNtTnNaU0JqZUQwaU1USWlJR041UFNJeE1pSWdjajBpTlNJdlBqd3ZjM1puUGdvPSIsInNpemVzIjoiMjR4MjQiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzI1NjNlYiI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iNSIvPjwvc3ZnPgo=">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            min-height: 100vh;
+            padding: 16px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+        }
+        
+        .setup-section {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .setup-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 16px;
+        }
+        
+        .group-info {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .invite-section {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .invite-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .invite-method {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .method-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .contact-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .contact-list {
+            max-height: 120px;
+            overflow-y: auto;
+            background: #f9fafb;
+            border-radius: 6px;
+            padding: 8px;
+        }
+        
+        .contact-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            background: white;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .members-section {
+            margin-bottom: 20px;
+        }
+        
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .member-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .member-card.current {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        
+        .member-info {
+            flex: 1;
+        }
+        
+        .member-name {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+        
+        .member-contact {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .member-status {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            background: #10b981;
+            color: white;
+            margin-bottom: 4px;
+        }
+        
+        .notification-banner {
+            background: #dbeafe;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .notification-text {
+            color: #1e40af;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .current-time {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            color: #374151;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-section {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .input-sm {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .btn-xs {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        
+        .btn-icon {
+            padding: 8px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-icon:hover {
+            background: #f3f4f6;
+        }
+        
+        .events-section {
+            margin-top: 24px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+        
+        .events-filter {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .filter-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: #6b7280;
+        }
+        
+        .event-card {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+        
+        .event-card.past {
+            background: #f9fafb;
+            border-color: #e5e7eb;
+        }
+        
+        .event-card.my-event {
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .event-content {
+            flex: 1;
+        }
+        
+        .event-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        
+        .event-description {
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+        
+        .event-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+            color: #6b7280;
+            flex-wrap: wrap;
+        }
+        
+        .event-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 16px;
+        }
+        
+        .badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge.gray {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+        
+        .badge.blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .creator-info {
+            color: #6b7280;
+            font-size: 12px;
+            font-style: italic;
+        }
+        
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+        
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .contact-type {
+            font-size: 10px;
+            background: #e5e7eb;
+            color: #4b5563;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .invite-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .members-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .event-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .event-actions {
+                margin-left: 0;
+            }
+            
+            .group-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Icons as SVG components
+        const CalendarIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M8 2v4m8-4v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+            </svg>
+        );
+
+        const PhoneIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+        );
+
+        const MailIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+            </svg>
+        );
+
+        const MessageSquareIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            </svg>
+        );
+
+        const ClockIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+            </svg>
+        );
+
+        const PlusIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+        );
+
+        const TrashIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="3,6 5,6 21,6"/>
+                <path d="m19,6v14a2,2 0 01-2,2H7a2,2 0 01-2-2V6m3,0V4a2,2 0 012-2h4a2,2 0 012,2v2"/>
+            </svg>
+        );
+
+        const VolumeIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="11,5 6,9 2,9 2,15 6,15 11,19 11,5"/>
+                <path d="m19.07,4.93a10,10 0 010,14.14M15.54,8.46a5,5 0 010,7.07"/>
+            </svg>
+        );
+
+        const BellIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9M13.73 21a2 2 0 01-3.46 0"/>
+            </svg>
+        );
+
+        const UsersIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+        );
+
+        const ShareIcon = () => (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+        );
+
+        const XIcon = () => (
+            <svg className="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        );
+
+        const GroupSchedulingApp = () => {
+            const [groupId, setGroupId] = useState(() => localStorage.getItem('groupSchedulingId') || '');
+            const [userInfo, setUserInfo] = useState(() => {
+                const saved = localStorage.getItem('groupSchedulingUser');
+                return saved ? JSON.parse(saved) : { name: '', phone: '', email: '' };
+            });
+            
+            const [groupMembers, setGroupMembers] = useState(() => {
+                const saved = localStorage.getItem('groupSchedulingMembers');
+                return saved ? JSON.parse(saved) : [];
+            });
+            
+            const [newMember, setNewMember] = useState({ name: '', contact: '', type: 'phone' });
+            const [inviteContacts, setInviteContacts] = useState([]);
+            
+            const [events, setEvents] = useState(() => {
+                const saved = localStorage.getItem('groupSchedulingEvents');
+                return saved ? JSON.parse(saved) : [];
+            });
+            
+            const [newEvent, setNewEvent] = useState({
+                title: '',
+                description: '',
+                date: '',
+                time: '',
+                notified: false
+            });
+            
+            const [currentTime, setCurrentTime] = useState(new Date());
+            const [speechSupported, setSpeechSupported] = useState(false);
+            const [eventFilter, setEventFilter] = useState('all');
+
+            // Save data to localStorage
+            useEffect(() => {
+                localStorage.setItem('groupSchedulingEvents', JSON.stringify(events));
+            }, [events]);
+
+            useEffect(() => {
+                localStorage.setItem('groupSchedulingMembers', JSON.stringify(groupMembers));
+            }, [groupMembers]);
+
+            useEffect(() => {
+                localStorage.setItem('groupSchedulingId', groupId);
+            }, [groupId]);
+
+            useEffect(() => {
+                localStorage.setItem('groupSchedulingUser', JSON.stringify(userInfo));
+            }, [userInfo]);
+
+            // Check if speech synthesis is supported
+            useEffect(() => {
+                setSpeechSupported('speechSynthesis' in window);
+            }, []);
+
+            // Update current time every minute
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setCurrentTime(new Date());
+                }, 60000);
+                return () => clearInterval(timer);
+            }, []);
+
+            // Check for notifications
+            useEffect(() => {
+                const checkNotifications = () => {
+                    const now = new Date();
+                    events.forEach((event, index) => {
+                        if (!event.notified) {
+                            const eventDateTime = new Date(`${event.date}T${event.time}`);
+                            const timeDiff = eventDateTime.getTime() - now.getTime();
+                            
+                            if (timeDiff <= 60000 && timeDiff > 0) {
+                                playVoiceNotification(event);
+                                setEvents(prev => prev.map((e, i) => 
+                                    i === index ? { ...e, notified: true } : e
+                                ));
+                            }
+                        }
+                    });
+                };
+
+                const notificationTimer = setInterval(checkNotifications, 30000);
+                return () => clearInterval(notificationTimer);
+            }, [events]);
+
+            const generateGroupId = () => {
+                const id = Math.random().toString(36).substr(2, 8).toUpperCase();
+                setGroupId(id);
+                if (userInfo.name) {
+                    setGroupMembers([userInfo]);
+                }
+            };
+
+            const joinGroup = () => {
+                if (groupId && userInfo.name && !groupMembers.some(m => m.phone === userInfo.phone || m.email === userInfo.email)) {
+                    setGroupMembers(prev => [...prev, userInfo]);
+                }
+            };
+
+            const validateContact = (contact, type) => {
+                if (type === 'phone') {
+                    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+                    return phoneRegex.test(contact.replace(/\s|-/g, ''));
+                } else if (type === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(contact);
+                }
+                return false;
+            };
+
+            const addMemberToInviteList = () => {
+                if (newMember.name && newMember.contact && validateContact(newMember.contact, newMember.type)) {
+                    const contactExists = inviteContacts.some(c => 
+                        c.contact === newMember.contact || 
+                        groupMembers.some(m => (m.phone === newMember.contact || m.email === newMember.contact))
+                    );
+                    
+                    if (!contactExists) {
+                        setInviteContacts(prev => [...prev, { ...newMember, id: Date.now() }]);
+                        setNewMember({ name: '', contact: '', type: 'phone' });
+                    } else {
+                        alert('This contact is already added or is already a member!');
+                    }
+                } else {
+                    alert('Please enter valid name and contact information!');
+                }
+            };
+
+            const removeFromInviteList = (id) => {
+                setInviteContacts(prev => prev.filter(contact => contact.id !== id));
+            };
+
+            const sendInvitations = () => {
+                inviteContacts.forEach(contact => {
+                    if (contact.type === 'phone') {
+                        sendSMSInvitation(contact);
+                    } else if (contact.type === 'email') {
+                        sendEmailInvitation(contact);
+                    }
+                });
+                
+                // Add to pending members (in real app, they'd accept the invitation)
+                const pendingMembers = inviteContacts.map(contact => ({
+                    ...contact,
+                    status: 'pending',
+                    invitedAt: new Date().toISOString()
+                }));
+                
+                setGroupMembers(prev => [...prev, ...pendingMembers]);
+                setInviteContacts([]);
+                
+                alert(`Invitations sent to ${inviteContacts.length} contacts!`);
+            };
+
+            const sendSMSInvitation = (contact) => {
+                const message = `Hi ${contact.name}! You're invited to join our Group Scheduling app. Group ID: ${groupId}. Download the app and use this ID to join: ${window.location.href}?group=${groupId}`;
+                
+                // Try to open SMS app
+                if (navigator.userAgent.match(/Android/i)) {
+                    window.open(`sms:${contact.contact}?body=${encodeURIComponent(message)}`);
+                } else if (navigator.userAgent.match(/iPhone/i)) {
+                    window.open(`sms:${contact.contact}&body=${encodeURIComponent(message)}`);
+                } else {
+                    // Fallback - copy to clipboard
+                    navigator.clipboard.writeText(`${contact.contact}: ${message}`);
+                    alert(`SMS invitation copied to clipboard for ${contact.name}`);
+                }
+            };
+
+            const sendEmailInvitation = (contact) => {
+                const subject = 'Join our Group Scheduling App';
+                const body = `Hi ${contact.name}!
+
+You're invited to join our Group Scheduling app where we can coordinate events and get voice notifications.
+
+Group ID: ${groupId}
+
+To join:
+1. Open this link: ${window.location.href}?group=${groupId}
+2. Enter your details and use the Group ID above
+
+Looking forward to scheduling together!`;
+
+                const mailtoLink = `mailto:${contact.contact}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.open(mailtoLink);
+            };
+
+            const removeMember = (memberToRemove) => {
+                const isCurrentUser = memberToRemove.phone === userInfo.phone || memberToRemove.email === userInfo.email;
+                const isAdmin = groupMembers[0] && (groupMembers[0].phone === userInfo.phone || groupMembers[0].email === userInfo.email);
+                
+                if (isCurrentUser || isAdmin) {
+                    setGroupMembers(prev => prev.filter(member => 
+                        member.phone !== memberToRemove.phone && member.email !== memberToRemove.email
+                    ));
+                    // Remove events created by this member
+                    setEvents(prev => prev.filter(event => event.creator !== memberToRemove.name));
+                }
+            };
+
+            const playVoiceNotification = (event) => {
+                if (speechSupported) {
+                    const utterance = new SpeechSynthesisUtterance(
+                        `Reminder: ${event.creator}'s event "${event.title}" is scheduled now. ${event.description}`
+                    );
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1;
+                    utterance.volume = 1;
+                    speechSynthesis.speak(utterance);
+                }
+                
+                if (Notification.permission === 'granted') {
+                    new Notification(`Event Reminder: ${event.title}`, {
+                        body: `${event.description} (Created by ${event.creator})`,
+                        icon: '/android-chrome-192x192.png'
+                    });
+                }
+            };
+
+            const requestNotificationPermission = async () => {
+                if ('Notification' in window && Notification.permission === 'default') {
+                    await Notification.requestPermission();
+                }
+            };
+
+            const addEvent = () => {
+                if (newEvent.title && newEvent.date && newEvent.time && userInfo.name) {
+                    const eventWithCreator = {
+                        ...newEvent,
+                        id: Date.now(),
+                        creator: userInfo.name,
+                        createdAt: new Date().toISOString()
+                    };
+                    setEvents([...events, eventWithCreator]);
+                    setNewEvent({ title: '', description: '', date: '', time: '', notified: false });
+                }
+            };
+
+            const deleteEvent = (id) => {
+                const event = events.find(e => e.id === id);
+                if (event && (event.creator === userInfo.name || groupMembers[0].name === userInfo.name)) {
+                    setEvents(events.filter(event => event.id !== id));
+                }
+            };
+
+            const testVoiceNotification = (event) => {
+                playVoiceNotification(event);
+            };
+
+            const formatDateTime = (date, time) => {
+                const eventDate = new Date(`${date}T${time}`);
+                return eventDate.toLocaleString();
+            };
+
+            const isEventUpcoming = (date, time) => {
+                const eventDateTime = new Date(`${date}T${time}`);
+                return eventDateTime > currentTime;
+            };
+
+            const getTomorrowDate = () => {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                return tomorrow.toISOString().split('T')[0];
+            };
+
+            const getFilteredEvents = () => {
+                switch (eventFilter) {
+                    case 'my':
+                        return events.filter(event => event.creator === userInfo.name);
+                    case 'upcoming':
+                        return events.filter(event => isEventUpcoming(event.date, event.time));
+                    case 'past':
+                        return events.filter(event => !isEventUpcoming(event.date, event.time));
+                    default:
+                        return events;
+                }
+            };
+
+            // Check for group ID in URL on load
+            useEffect(() => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlGroupId = urlParams.get('group');
+                if (urlGroupId && !groupId) {
+                    setGroupId(urlGroupId);
+                }
+            }, []);
+
+            if (!groupId || !userInfo.name) {
+                return (
+                    <div className="container">
+                        <div className="card">
+                            <div className="header">
+                                <h1 className="title">
+                                    <UsersIcon />
+                                    Group Voice Scheduling
+                                </h1>
+                                <p className="subtitle">Create or join a group to start scheduling together</p>
+                            </div>
+
+                            <div className="setup-section">
+                                <h2 className="setup-title">Setup Your Profile</h2>
+                                
+                                <div className="form-grid">
+                                    <input
+                                        type="text"
+                                        placeholder="Your full name"
+                                        value={userInfo.name}
+                                        onChange={(e) => setUserInfo({...userInfo, name: e.target.value})}
+                                        className="input"
+                                    />
+                                    <input
+                                        type="tel"
+                                        placeholder="Your mobile number"
+                                        value={userInfo.phone}
+                                        onChange={(e) => setUserInfo({...userInfo, phone: e.target.value})}
+                                        className="input"
+                                    />
+                                    <input
+                                        type="email"
+                                        placeholder="Your email address"
+                                        value={userInfo.email}
+                                        onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}
+                                        className="input"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Group ID (leave empty to create new)"
+                                        value={groupId}
+                                        onChange={(e) => setGroupId(e.target.value.toUpperCase())}
+                                        className="input"
+                                    />
+                                </div>
+
+                                <div style={{display: 'flex', gap: '12px', flexWrap: 'wrap'}}>
+                                    {!groupId && (
+                                        <button 
+                                            onClick={generateGroupId} 
+                                            className="btn btn-primary" 
+                                            disabled={!userInfo.name || (!userInfo.phone && !userInfo.email)}
+                                        >
+                                            <PlusIcon />
+                                            Create New Group
+                                        </button>
+                                    )}
+                                    {groupId && (
+                                        <button 
+                                            onClick={joinGroup} 
+                                            className="btn btn-success" 
+                                            disabled={!userInfo.name || (!userInfo.phone && !userInfo.email)}
+                                        >
+                                            <UsersIcon />
+                                            Join Group
+                                        </button>
+                                    )}
+                                </div>
+                                
+                                {(!userInfo.phone && !userInfo.email) && (
+                                    <p style={{color: '#ef4444', fontSize: '14px', marginTop: '8px'}}>
+                                        Please provide at least your mobile number or email address
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="container">
+                    <div className="card">
+                        <div className="header">
+                            <h1 className="title">
+                                <UsersIcon />
+                                Group Voice Scheduling
+                            </h1>
+                            <p className="subtitle">Shared scheduling with voice notifications</p>
+                        </div>
+
+                        <div className="group-info">
+                            <div className="group-header">
+                                <div>
+                                    <h3 style={{color: '#047857', marginBottom: '8px'}}>Group: {groupId}</h3>
+                                    <p style={{color: '#065f46', fontSize: '14px'}}>Share this ID with others or invite them directly</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="invite-section">
+                            <h3 className="setup-title">Invite Members</h3>
+                            
+                            <div className="invite-methods">
+                                <div className="invite-method">
+                                    <div className="method-title">
+                                        <PhoneIcon />
+                                        Add by Mobile Number
+                                    </div>
+                                    <div className="contact-input">
+                                        <input
+                                            type="text"
+                                            placeholder="Contact name"
+                                            value={newMember.type === 'phone' ? newMember.name : ''}
+                                            onChange={(e) => setNewMember({...newMember, name: e.target.value, type: 'phone'})}
+                                            className="input input-sm"
+                                        />
+                                        <input
+                                            type="tel"
+                                            placeholder="+1234567890"
+                                            value={newMember.type === 'phone' ? newMember.contact : ''}
+                                            onChange={(e) => setNewMember({...newMember, contact: e.target.value, type: 'phone'})}
+                                            className="input input-sm"
+                                        />
+                                        <button onClick={addMemberToInviteList} className="btn btn-sm btn-secondary">
+                                            <PlusIcon />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="invite-method">
+                                    <div className="method-title">
+                                        <MailIcon />
+                                        Add by Email
+                                    </div>
+                                    <div className="contact-input">
+                                        <input
+                                            type="text"
+                                            placeholder="Contact name"
+                                            value={newMember.type === 'email' ? newMember.name : ''}
+                                            onChange={(e) => setNewMember({...newMember, name: e.target.value, type: 'email'})}
+                                            className="input input-sm"
+                                        />
+                                        <input
+                                            type="email"
+                                            placeholder="email@example.com"
+                                            value={newMember.type === 'email' ? newMember.contact : ''}
+                                            onChange={(e) => setNewMember({...newMember, contact: e.target.value, type: 'email'})}
+                                            className="input input-sm"
+                                        />
+                                        <button onClick={addMemberToInviteList} className="btn btn-sm btn-secondary">
+                                            <PlusIcon />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {inviteContacts.length > 0 && (
+                                <div>
+                                    <h4 style={{marginBottom: '12px', color: '#1f2937'}}>Ready to Invite:</h4>
+                                    <div className="contact-list">
+                                        {inviteContacts.map(contact => (
+                                            <div key={contact.id} className="contact-item">
+                                                <div>
+                                                    <strong>{contact.name}</strong>
+                                                    <div style={{fontSize: '12px', color: '#6b7280'}}>
+                                                        {contact.type === 'phone' ? <PhoneIcon /> : <MailIcon />}
+                                                        <span style={{marginLeft: '4px'}}>{contact.contact}</span>
+                                                    </div>
+                                                </div>
+                                                <button 
+                                                    onClick={() => removeFromInviteList(contact.id)}
+                                                    className="btn-icon"
+                                                    style={{color: '#ef4444'}}
+                                                >
+                                                    <XIcon />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button onClick={sendInvitations} className="btn btn-warning" style={{marginTop: '12px'}}>
+                                        <MessageSquareIcon />
+                                        Send Invitations ({inviteContacts.length})
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="members-section">
+                            <h3 className="setup-title">Group Members ({groupMembers.length})</h3>
+                            <div className="members-grid">
+                                {groupMembers.map((member, index) => (
+                                    <div 
+                                        key={`${member.phone || member.email}-${index}`} 
+                                        className={`member-card ${member.name === userInfo.name ? 'current' : ''}`}
+                                    >
+                                        <div className="member-info">
+                                            {member.status && (
+                                                <div className="member-status">{member.status}</div>
+                                            )}
+                                            <div className="member-name">{member.name}</div>
+                                            <div className="member-contact">
+                                                {member.phone && (
+                                                    <span className="contact-type">📱 {member.phone}</span>
+                                                )}
+                                                {member.email && (
+                                                    <span className="contact-type" style={{marginLeft: member.phone ? '8px' : '0'}}>
+                                                        📧 {member.email}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        {(member.name !== userInfo.name && index === 0) && (
+                                            <button 
+                                                onClick={() => removeMember(member)}
+                                                className="btn-icon"
+                                                style={{color: '#ef4444'}}
+                                                title="Remove member"
+                                            >
+                                                <XIcon />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="notification-banner">
+                            <div className="notification-text">
+                                <BellIcon />
+                                <span>
+                                    {speechSupported ? 'Voice notifications supported' : 'Voice notifications not supported'}
+                                </span>
+                            </div>
+                            <button className="btn btn-secondary btn-sm" onClick={requestNotificationPermission}>
+                                Enable Notifications
+                            </button>
+                        </div>
+
+                        <div className="current-time">
+                            <ClockIcon />
+                            <span>Current Time: {currentTime.toLocaleString()}</span>
+                        </div>
+
+                        <div className="form-section">
+                            <h2 className="form-title">Schedule New Event</h2>
+                            
+                            <div className="form-grid">
+                                <input
+                                    type="text"
+                                    placeholder="Event title"
+                                    value={newEvent.title}
+                                    onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
+                                    className="input"
+                                />
+                                
+                                <input
+                                    type="text"
+                                    placeholder="Description (optional)"
+                                    value={newEvent.description}
+                                    onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
+                                    className="input"
+                                />
+                                
+                                <input
+                                    type="date"
+                                    value={newEvent.date}
+                                    min={getTomorrowDate()}
+                                    onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
+                                    className="input"
+                                />
+                                
+                                <input
+                                    type="time"
+                                    value={newEvent.time}
+                                    onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
+                                    className="input"
+                                />
+                            </div>
+                            
+                            <button onClick={addEvent} className="btn btn-primary">
+                                <PlusIcon />
+                                Schedule Event for Group
+                            </button>
+                        </div>
+
+                        <div className="events-section">
+                            <h2 className="section-title">Group Events</h2>
+                            
+                            <div className="events-filter">
+                                <button 
+                                    className={`filter-btn ${eventFilter === 'all' ? 'active' : ''}`}
+                                    onClick={() => setEventFilter('all')}
+                                >
+                                    All Events ({events.length})
+                                </button>
+                                <button 
+                                    className={`filter-btn ${eventFilter === 'my' ? 'active' : ''}`}
+                                    onClick={() => setEventFilter('my')}
+                                >
+                                    My Events ({events.filter(e => e.creator === userInfo.name).length})
+                                </button>
+                                <button 
+                                    className={`filter-btn ${eventFilter === 'upcoming' ? 'active' : ''}`}
+                                    onClick={() => setEventFilter('upcoming')}
+                                >
+                                    Upcoming ({events.filter(e => isEventUpcoming(e.date, e.time)).length})
+                                </button>
+                                <button 
+                                    className={`filter-btn ${eventFilter === 'past' ? 'active' : ''}`}
+                                    onClick={() => setEventFilter('past')}
+                                >
+                                    Past ({events.filter(e => !isEventUpcoming(e.date, e.time)).length})
+                                </button>
+                            </div>
+                            
+                            {getFilteredEvents().length === 0 ? (
+                                <div className="empty-state">
+                                    <CalendarIcon />
+                                    <p>No events found for the selected filter</p>
+                                </div>
+                            ) : (
+                                <div>
+                                    {getFilteredEvents()
+                                        .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`))
+                                        .map((event) => (
+                                            <div
+                                                key={event.id}
+                                                className={`event-card ${
+                                                    !isEventUpcoming(event.date, event.time) ? 'past' : ''
+                                                } ${event.creator === userInfo.name ? 'my-event' : ''}`}
+                                            >
+                                                <div className="event-header">
+                                                    <div className="event-content">
+                                                        <h3 className="event-title">{event.title}</h3>
+                                                        {event.description && (
+                                                            <p className="event-description">{event.description}</p>
+                                                        )}
+                                                        <div className="event-meta">
+                                                            <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                                                                <CalendarIcon />
+                                                                {formatDateTime(event.date, event.time)}
+                                                            </span>
+                                                            <span className="creator-info">
+                                                                Created by {event.creator}
+                                                            </span>
+                                                            {event.notified && (
+                                                                <span className="badge">Notified</span>
+                                                            )}
+                                                            {!isEventUpcoming(event.date, event.time) && (
+                                                                <span className="badge gray">Past Event</span>
+                                                            )}
+                                                            {event.creator === userInfo.name && (
+                                                                <span className="badge blue">My Event</span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="event-actions">
+                                                        <button
+                                                            onClick={() => testVoiceNotification(event)}
+                                                            className="btn-icon"
+                                                            title="Test voice notification"
+                                                        >
+                                                            <VolumeIcon />
+                                                        </button>
+                                                        {(event.creator === userInfo.name || groupMembers[0]?.name === userInfo.name) && (
+                                                            <button
+                                                                onClick={() => deleteEvent(event.id)}
+                                                                className="btn-icon"
+                                                                title="Delete event"
+                                                                style={{color: '#ef4444'}}
+                                                            >
+                                                                <TrashIcon />
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4gewogIGNvbnNvbGUubG9nKCdTZXJ2aWNlIFdvcmtlciBpbnN0YWxsZWQnKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2FjdGl2YXRlJywgZXZlbnQgPT4gewogIGNvbnNvbGUubG9nKCdTZXJ2aWNlIFdvcmtlciBhY3RpdmF0ZWQnKTsKfSk7')
+                .then(registration => console.log('SW registered'))
+                .catch(error => console.log('SW registration failed'));
+        }
+
+        ReactDOM.render(<GroupSchedulingApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
